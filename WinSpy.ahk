@@ -1743,8 +1743,9 @@ OnWM_KEYDOWN(wParam, lParam, msg, hWnd) {
     Global
 
     If (wParam == 112) { ; F1
-        GoSub ShowHelp
-
+        ; GoSub ShowHelp
+        OnWM_MOUSEMOVE(99,0,0,0)
+        OnWM_LBUTTONUP(99,0,0,0)
     } Else If (wParam == 113) { ; F2
         If (hParent := GetParent(g_hWnd)) {
             g_hWnd := hParent
@@ -2241,7 +2242,7 @@ Return
 OnWM_MOUSEMOVE(wParam, lParam, msg, hWnd) {
     Static hOldWnd := 0
 
-    If (Dragging) {
+    If (Dragging || wParam == 99) {
         MouseGetPos x, y, hWin, hCtl, 2
 
         g_hWnd := (hCtl == "") ? hWin : hCtl
@@ -2281,7 +2282,7 @@ OnWM_MOUSEMOVE(wParam, lParam, msg, hWnd) {
 }
 
 OnWM_LBUTTONUP(wParam, lParam, msg, hWnd) {
-    If (Dragging) {
+    If (Dragging || wParam == 99) {
         Dragging := False
 
         DllCall("ReleaseCapture")
